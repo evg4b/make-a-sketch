@@ -22,6 +22,7 @@ const Sidebar: FC<SidebarProps> = ({ onOriginalSelected, onProcessed }) => {
         setSvg(precessed);
       })();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file])
 
   const onSelectHandler = (file: SourceFile) => {
