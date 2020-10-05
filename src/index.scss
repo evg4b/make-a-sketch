@@ -1,0 +1,92 @@
+@charset "utf-8";
+
+// Import a Google Font
+@import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
+
+// Set your brand colors
+$purple: #8A4D76;
+$pink: #FA7C91;
+$brown: #757763;
+$beige-light: #D0D1CD;
+$beige-lighter: #EFF0EB;
+
+// Update Bulma's global variables
+$family-sans-serif: "Nunito",
+sans-serif;
+$grey-dark: $brown;
+$grey-light: $beige-light;
+$primary: $purple;
+$link: $pink;
+$widescreen-enabled: false;
+$fullhd-enabled: false;
+
+// Update some of Bulma's component variables
+$body-background-color: $beige-lighter;
+$control-border-width: 2px;
+$input-border-color: transparent;
+$input-shadow: none;
+
+@import "~bulma/bulma.sass";
+
+#root {
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+
+  &>section {
+    height: 100%;
+
+    &>.container {
+      height: 100%;
+
+      &>.columns {
+        height: 100%;
+
+        &>.column {
+          height: 100%;
+        }
+      }
+    }
+
+  }
+}
+
+.card-header-title {
+  .tag.is-danger {
+    margin-left: 1em;;
+  }
+}
+
+.drop-zone {
+  width: 100%;
+  height: 300px;
+  background-color: #FA7C91;
+}
+
+._react-file-reader-input {
+  width: 100%;
+}
+
+.is-disabled {
+  color: $grey-dark;
+  pointer-events: none;
+}
+
+.box.preview {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .preview-block {
+    height: 100%;
+    flex-direction: column;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    div {
+      text-align: center;
+    }
+  }
+}

@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Preview from './components/Preview';
+import Sidebar from './Sidebar';
 
-function App() {
+
+const App = () => {
+  const [original, setOriginal] = useState<string>();
+  const [precessed, setPrecessed] = useState<string>();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <section className="section">
+      <div className="container is-fluid">
+        <div className="columns">
+          <div className="column is-one-fifth">
+            <Sidebar onOriginalSelected={setOriginal} onProcessed={setPrecessed} />
+          </div>
+          <div className="column">
+            <Preview original={original || ""} precessed={precessed || ""} />
+          </div>
+        </div>
+      </div>
+    </section>
   );
-}
+};
 
 export default App;
