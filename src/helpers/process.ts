@@ -44,7 +44,7 @@ const processCircle = (rc: RoughSVG, circle: SVGCircleElement, customOptions: Pa
   let node = rc.circle(
     Number(circle.getAttribute("cx")),
     Number(circle.getAttribute("cy")),
-    Number(circle.getAttribute("r")),
+    Number(circle.getAttribute("r"))*2,
     options(circle, customOptions),
   );
   circle.parentNode?.replaceChild(node, circle);
@@ -56,6 +56,8 @@ const processEllipse = (rc: RoughSVG, ellipse: SVGEllipseElement, customOptions:
     Number(ellipse.getAttribute("cy")),
     Number(ellipse.getAttribute("rx")),
     Number(ellipse.getAttribute("ry")),
+    Number(ellipse.getAttribute("rx"))*2,
+    Number(ellipse.getAttribute("ry"))*2,
     options(ellipse, customOptions),
   );
   ellipse.parentNode?.replaceChild(node, ellipse);
