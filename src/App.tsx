@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Preview from './components/Preview';
-import Sidebar from './Sidebar';
+import Sidebar from './components/Sidebar';
 
 
 const App = () => {

@@ -72,6 +72,10 @@ $input-shadow: none;
   pointer-events: none;
 }
 
+.tabs {
+  flex-shrink: 0;
+}
+
 .box.preview {
   height: 100%;
   overflow: hidden;

@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
-import FileInput, { SourceFile } from './components/FIleInput';
-import { processSvg } from './helpers/process';
+import FileInput, { SourceFile } from './FIleInput';
+import { processSvg } from '../helpers/process';
 import fileSave from 'save-file'
 import prettyBytes from 'pretty-bytes';
 import clsx from 'clsx';
@@ -17,7 +17,9 @@ const Sidebar: FC<SidebarProps> = ({ onOriginalSelected, onProcessed }) => {
   useEffect(() => {
     if (file) {
       (async () => {
-        const precessed = await processSvg(file.content);
+        const precessed = await processSvg(file.content, {
+          fillStyle: 'solid',
+        });
         onProcessed(precessed);
         setSvg(precessed);
       })();

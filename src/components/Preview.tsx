@@ -1,16 +1,11 @@
 import React, { FC, useState } from 'react';
 import clsx from 'clsx';
+import RenderSVG from './RenderSVG';
 
 interface PreviewProps {
-  original: string | null;
-  precessed: string | null;
+  original: string | undefined;
+  precessed: string | undefined;
 }
-
-const Render: FC<{ exists: boolean }> = ({ exists, children }) => (
-  <>
-    {!exists ? <div> Please select file </div> : children}
-  </>
-)
 
 const Preview: FC<PreviewProps> = ({ original, precessed }) => {
   const [isOriginal, setIsOriginal] = useState(false)
@@ -30,9 +25,7 @@ const Preview: FC<PreviewProps> = ({ original, precessed }) => {
         </ul>
       </div>
       <div className="preview-block">
-        {isOriginal
-          ? <Render exists={!!original}><div dangerouslySetInnerHTML={{ __html: original! }}></div></Render>
-          : <Render exists={!!precessed}><div dangerouslySetInnerHTML={{ __html: precessed! }}></div></Render>}
+        {isOriginal ? <RenderSVG svg={original} /> : <RenderSVG svg={precessed} />}
       </div>
     </div>
   );

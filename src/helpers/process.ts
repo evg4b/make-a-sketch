@@ -1,70 +1,93 @@
 import rough from 'roughjs/bin/rough';
 import { RoughSVG } from 'roughjs/bin/svg';
+import { Options } from 'roughjs/bin/core';
 
-const processPath = (rc: RoughSVG, pathElement: SVGPathElement) => {
-  const node = rc.path(pathElement.getAttribute("d") || "", {
-    fill: pathElement.getAttribute("fill") || undefined,
-    stroke: pathElement.getAttribute("stroke") || undefined,
-  });
-
-  pathElement.parentNode?.replaceChild(node, pathElement);
+const getString = (element: SVGElement, attribute: string) : string | undefined => {
+  return element.getAttribute(attribute) || undefined;
 }
 
-const processRect = (rc: RoughSVG, rect: SVGRectElement) => {
+const getNumber = (element: SVGElement, attribute: string) : number | undefined => {
+  if (element.getAttribute(attribute)) {
+    return Number(element.getAttribute(attribute));
+  }
+
+  return undefined;
+}
+
+const options = (element: SVGElement, customOptions: Partial<Options>): Options => {
+  console.log(element.getAttribute('stroke-width'))
+  return {
+    fill: getString(element,'fill'),
+    stroke: getString(element, 'stroke'),
+    strokeWidth: getNumber(element, 'stroke-width'),
+    ...customOptions,
+  };
+}
+
+const processPath = (rc: RoughSVG, path: SVGPathElement, customOptions: Partial<Options>) => {
+  const node = rc.path(path.getAttribute("d") || "", options(path, customOptions));
+  path.parentNode?.replaceChild(node, path);
+}
+
+const processRect = (rc: RoughSVG, rect: SVGRectElement, customOptions: Partial<Options>) => {
   let node = rc.rectangle(
     Number(rect.getAttribute("x")),
     Number(rect.getAttribute("y")),
     Number(rect.getAttribute("width")),
-    Number(rect.getAttribute("height"))
+    Number(rect.getAttribute("height")),
+    options(rect, customOptions),
   );
   rect.parentNode?.replaceChild(node, rect);
 }
 
-const processCircle = (rc: RoughSVG, rect: SVGCircleElement) => {
+const processCircle = (rc: RoughSVG, circle: SVGCircleElement, customOptions: Partial<Options>) => {
   let node = rc.circle(
-    Number(rect.getAttribute("cx")),
-    Number(rect.getAttribute("cy")),
-    Number(rect.getAttribute("r"))
+    Number(circle.getAttribute("cx")),
+    Number(circle.getAttribute("cy")),
+    Number(circle.getAttribute("r")),
+    options(circle, customOptions),
   );
-  rect.parentNode?.replaceChild(node, rect);
+  circle.parentNode?.replaceChild(node, circle);
 }
 
-const processEllipse = (rc: RoughSVG, rect: SVGEllipseElement) => {
+const processEllipse = (rc: RoughSVG, ellipse: SVGEllipseElement, customOptions: Partial<Options>) => {
   let node = rc.ellipse(
-    Number(rect.getAttribute("cx")),
-    Number(rect.getAttribute("cy")),
-    Number(rect.getAttribute("rx")),
-    Number(rect.getAttribute("ry"))
+    Number(ellipse.getAttribute("cx")),
+    Number(ellipse.getAttribute("cy")),
+    Number(ellipse.getAttribute("rx")),
+    Number(ellipse.getAttribute("ry")),
+    options(ellipse, customOptions),
   );
-  rect.parentNode?.replaceChild(node, rect);
+  ellipse.parentNode?.replaceChild(node, ellipse);
 }
 
-const processLine = (rc: RoughSVG, rect: SVGLineElement) => {
+const processLine = (rc: RoughSVG, line: SVGLineElement, customOptions: Partial<Options>) => {
   let node = rc.rectangle(
-    Number(rect.getAttribute("x1")),
-    Number(rect.getAttribute("y1")),
-    Number(rect.getAttribute("x2")),
-    Number(rect.getAttribute("y2"))
+    Number(line.getAttribute("x1")),
+    Number(line.getAttribute("y1")),
+    Number(line.getAttribute("x2")),
+    Number(line.getAttribute("y2")),
+    options(line, customOptions),
   );
-  rect.parentNode?.replaceChild(node, rect);
+  line.parentNode?.replaceChild(node, line);
 }
 
-const serialize = (element: SVGElement) : string => {
+const serialize = (element: SVGElement): string => {
   var serializer = new XMLSerializer();
   var source = serializer.serializeToString(element);
 
-  if(!source.match(/^<svg[^>]+xmlns="http\\:\/\/www\.w3\.org\/2000\/svg"/)){
-      source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+  if (!source.match(/^<svg[^>]+xmlns="http\\:\/\/www\.w3\.org\/2000\/svg"/)) {
+    source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
   }
 
-  if(!source.match(/^<svg[^>]+"http\\:\/\/www\.w3\.org\/1999\/xlink"/)){
-      source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+  if (!source.match(/^<svg[^>]+"http\\:\/\/www\.w3\.org\/1999\/xlink"/)) {
+    source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
   }
 
   return '<?xml version="1.0" standalone="no"?>\r\n' + source;
 }
 
-export const processSvg = (content: string): Promise<string> =>
+export const processSvg = (content: string, customOptions: Partial<Options> = {}): Promise<string> =>
   new Promise((resolve, reject) => {
     try {
       const div = document.createElement('div');
@@ -75,11 +98,11 @@ export const processSvg = (content: string): Promise<string> =>
       }
 
       let rc = rough.svg(svg);
-      div.querySelectorAll("path").forEach(x => processPath(rc, x));
-      div.querySelectorAll("rect").forEach(x => processRect(rc, x));
-      div.querySelectorAll("circle").forEach(x => processCircle(rc, x));
-      div.querySelectorAll("ellipse").forEach(x => processEllipse(rc, x));
-      div.querySelectorAll("line").forEach(x => processLine(rc, x));
+      div.querySelectorAll("path").forEach(x => processPath(rc, x, customOptions));
+      div.querySelectorAll("rect").forEach(x => processRect(rc, x, customOptions));
+      div.querySelectorAll("circle").forEach(x => processCircle(rc, x, customOptions));
+      div.querySelectorAll("ellipse").forEach(x => processEllipse(rc, x, customOptions));
+      div.querySelectorAll("line").forEach(x => processLine(rc, x, customOptions));
       resolve(serialize(svg));
     } catch (err) {
       reject(err)
