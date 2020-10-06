@@ -40,13 +40,13 @@ const Sidebar: FC<SidebarProps> = ({ onOriginalSelected, onProcessed }) => {
     <div className="card">
       <header className="card-header">
         <p className="card-header-title">
-          MAKE A SKETCH <span className="tag is-danger">BETA</span>
+          Make a sketch <span className="tag is-danger">BETA</span>
         </p>
       </header>
       <div className="card-content">
         <div className="content">
           <p>
-            Service for quickly converting your <span>.svg</span> files using <a href="https://roughjs.com/">rough.js</a>.
+            Service that lets you quickly draw your svg diagram from <a href="https://www.diagrams.net/">diagrams.net</a> in a sketchy, hand-drawn-like, style. This project based on <a href="https://roughjs.com/">rough.js</a> library.
           </p>
           <FileInput onSelect={onSelectHandler} />
           {file && (
