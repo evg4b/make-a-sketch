@@ -47,6 +47,7 @@ const processCircle = (rc: RoughSVG, circle: SVGCircleElement, customOptions: Pa
     Number(circle.getAttribute("r"))*2,
     options(circle, customOptions),
   );
+  console.log(Number(circle.getAttribute("r")), Number(circle.getAttribute("r"))*2)
   circle.parentNode?.replaceChild(node, circle);
 }
 
@@ -54,8 +55,6 @@ const processEllipse = (rc: RoughSVG, ellipse: SVGEllipseElement, customOptions:
   let node = rc.ellipse(
     Number(ellipse.getAttribute("cx")),
     Number(ellipse.getAttribute("cy")),
-    Number(ellipse.getAttribute("rx")),
-    Number(ellipse.getAttribute("ry")),
     Number(ellipse.getAttribute("rx"))*2,
     Number(ellipse.getAttribute("ry"))*2,
     options(ellipse, customOptions),
@@ -78,11 +77,13 @@ const serialize = (element: SVGElement): string => {
   var serializer = new XMLSerializer();
   var source = serializer.serializeToString(element);
 
-  if (!source.match(/^<svg[^>]+xmlns="http\\:\/\/www\.w3\.org\/2000\/svg"/)) {
+  // eslint-disable-next-line no-useless-escape
+  if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
     source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
   }
 
-  if (!source.match(/^<svg[^>]+"http\\:\/\/www\.w3\.org\/1999\/xlink"/)) {
+  // eslint-disable-next-line no-useless-escape
+  if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
     source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
   }
 

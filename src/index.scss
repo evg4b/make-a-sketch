@@ -27,40 +27,18 @@ $input-border-color: transparent;
 $input-shadow: none;
 
 @import "~bulma/bulma.sass";
+@import "~bulma-switch/src/sass/index";
 
 #root {
   overflow: hidden;
   width: 100vw;
   height: 100vh;
-
-  &>section {
-    height: 100%;
-
-    &>.container {
-      height: 100%;
-
-      &>.columns {
-        height: 100%;
-
-        &>.column {
-          height: 100%;
-        }
-      }
-    }
-
-  }
 }
 
 .card-header-title {
   .tag.is-danger {
     margin-left: 1em;;
   }
-}
-
-.drop-zone {
-  width: 100%;
-  height: 300px;
-  background-color: #FA7C91;
 }
 
 ._react-file-reader-input {
@@ -72,25 +50,57 @@ $input-shadow: none;
   pointer-events: none;
 }
 
-.tabs {
-  flex-shrink: 0;
+.preview-block {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+
+  .no-file {
+    display: flex;
+    align-items: center;
+  }
 }
 
-.box.preview {
-  height: 100%;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+.no-selectable {
+  user-select: none;
+}
 
-  .preview-block {
-    height: 100%;
-    flex-direction: column;
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    div {
-      text-align: center;
+.sidebar {
+  z-index: 111;
+}
+
+.react-transform-component{
+  width: 100vw !important;
+  height: 100vh !important;
+  cursor: grab;
+}
+
+.preview-options {
+  position: fixed;
+  right: 3em;
+  top: 3em;
+  z-index: 999;
+  .zoom-label {
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.switch {
+  label {
+    &.left {
+      padding-right: 0.5rem;
     }
+    position: relative;
+    display: initial;
+    font-size: 1rem;
+    line-height: initial;
+    padding-top: .2rem;
+    cursor: pointer;
   }
 }

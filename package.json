@@ -11,6 +11,7 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "bulma": "^0.9.1",
+    "bulma-switch": "^2.0.0",
     "clsx": "^1.1.1",
     "node-sass": "^4.14.1",
     "pretty-bytes": "^5.4.1",
@@ -18,6 +19,7 @@
     "react-dom": "^16.13.1",
     "react-file-reader-input": "^2.0.0",
     "react-scripts": "3.4.3",
+    "react-zoom-pan-pinch": "^1.6.1",
     "roughjs": "^4.3.1",
     "save-file": "^2.3.1",
     "typescript": "~3.7.2"
@@ -29,7 +31,11 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "jsx-a11y/anchor-is-valid": "off",
+      "react-hooks/exhaustive-deps": "off"
+    }
   },
   "browserslist": {
     "production": [

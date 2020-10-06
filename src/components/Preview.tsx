@@ -1,6 +1,8 @@
 import React, { FC, useState } from 'react';
-import clsx from 'clsx';
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
+import { StateProvider } from 'react-zoom-pan-pinch/dist/store/StateContext'
 import RenderSVG from './RenderSVG';
+import Switch from './Switch';
 
 interface PreviewProps {
   original: string | undefined;
@@ -8,26 +10,37 @@ interface PreviewProps {
 }
 
 const Preview: FC<PreviewProps> = ({ original, precessed }) => {
-  const [isOriginal, setIsOriginal] = useState(false)
+  const [isProcessed, setIsProcessed] = useState(true)
+
+  if (!original || !precessed) {
+    return (
+      <div className="preview-block no-selectable">
+        <div className="no-file"> Please select file </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="box preview">
-      <div className="tabs is-centered">
-        <ul>
-          <li className={clsx({ "is-active": !isOriginal })}>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a onClick={() => setIsOriginal(false)}>Processed</a>
-          </li>
-          <li className={clsx({ "is-active": isOriginal })}>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a onClick={() => setIsOriginal(true)}>Original</a>
-          </li>
-        </ul>
-      </div>
-      <div className="preview-block">
-        {isOriginal ? <RenderSVG svg={original} /> : <RenderSVG svg={precessed} />}
-      </div>
-    </div>
+    <div className="preview-block">
+      <TransformWrapper options={{ centerContent: true }}>
+        {({ zoomIn, zoomOut, setDefaultState }: StateProvider) => 
+          <>
+            <div className="preview-options">
+              <Switch isChecked={isProcessed} onChange={setIsProcessed} />
+              <div className="buttons">
+                <label className="zoom-label no-selectable">Zoom:</label>
+                <button className="button is-primary is-outlined" onClick={zoomIn}>+</button>
+                <button className="button is-primary is-outlined" onClick={zoomOut}>-</button>
+                <button className="button is-primary is-outlined" onClick={setDefaultState}>Reset</button>
+              </div>
+            </div>
+            <TransformComponent>
+              <RenderSVG svg={isProcessed ? precessed : original} />
+            </TransformComponent>
+          </>
+        }
+      </TransformWrapper>
+    </div >
   );
 };
 
