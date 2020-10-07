@@ -23,7 +23,6 @@ $fullhd-enabled: false;
 // Update some of Bulma's component variables
 $body-background-color: $beige-lighter;
 $control-border-width: 2px;
-$input-border-color: transparent;
 $input-shadow: none;
 
 @import "~bulma/bulma.sass";
@@ -103,4 +102,21 @@ $input-shadow: none;
     padding-top: .2rem;
     cursor: pointer;
   }
+}
+
+.field {
+  .label {
+    margin-right: .5rem;
+    margin-top: .5rem;
+  }
+}
+
+.options,
+.file-info {
+  border-top: 1px solid #ededed;
+}
+
+.options {
+  max-height: 40rem;
+  overflow-y: scroll;
 }

@@ -1,6 +1,7 @@
 import rough from 'roughjs/bin/rough';
 import { RoughSVG } from 'roughjs/bin/svg';
 import { Options } from 'roughjs/bin/core';
+import Svgo from 'svgo';
 
 const getString = (element: SVGElement, attribute: string) : string | undefined => {
   return element.getAttribute(attribute) || undefined;
@@ -15,7 +16,6 @@ const getNumber = (element: SVGElement, attribute: string) : number | undefined 
 }
 
 const options = (element: SVGElement, customOptions: Partial<Options>): Options => {
-  console.log(element.getAttribute('stroke-width'))
   return {
     fill: getString(element,'fill'),
     stroke: getString(element, 'stroke'),
@@ -47,7 +47,6 @@ const processCircle = (rc: RoughSVG, circle: SVGCircleElement, customOptions: Pa
     Number(circle.getAttribute("r"))*2,
     options(circle, customOptions),
   );
-  console.log(Number(circle.getAttribute("r")), Number(circle.getAttribute("r"))*2)
   circle.parentNode?.replaceChild(node, circle);
 }
 
@@ -91,22 +90,39 @@ const serialize = (element: SVGElement): string => {
 }
 
 export const processSvg = (content: string, customOptions: Partial<Options> = {}): Promise<string> =>
-  new Promise((resolve, reject) => {
+  new Promise(async(resolve, reject) => {
     try {
-      const div = document.createElement('div');
-      div.innerHTML = content;
+      const processor = new Svgo({
+        plugins: [
+          { cleanupAttrs: true },
+          { removeComments: true },
+          { removeMetadata: true },
+          { removeXMLNS: true },
+          { convertShapeToPath: true },
+        ]
+      });
+      if(!(window as any).data) {
+        (window as any).data = document.createElement('div');
+      }
+      const div = (window as any).data as HTMLDivElement;
+      const data = await processor.optimize(content);
+      console.log(data);
+      div.innerHTML = data.data;
       const svg = div.querySelector('svg');
       if (!svg) {
         throw new Error('Svg element not found')
       }
-
       let rc = rough.svg(svg);
+
       div.querySelectorAll("path").forEach(x => processPath(rc, x, customOptions));
       div.querySelectorAll("rect").forEach(x => processRect(rc, x, customOptions));
       div.querySelectorAll("circle").forEach(x => processCircle(rc, x, customOptions));
       div.querySelectorAll("ellipse").forEach(x => processEllipse(rc, x, customOptions));
       div.querySelectorAll("line").forEach(x => processLine(rc, x, customOptions));
-      resolve(serialize(svg));
+
+      const res = await processor.optimize(serialize(svg));
+
+      resolve(res.data);
     } catch (err) {
       reject(err)
     }

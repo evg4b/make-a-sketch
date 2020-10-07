@@ -6,7 +6,7 @@ interface FileInputProps {
 }
 
 const FileSelect: FC<FileInputProps> = ({ onSelect }) => (
-  <div className="file has-name is-fullwidth ">
+  <div className="file has-name is-fullwidth">
     <FileReaderInput className="input-wrapper" accept=".svg" as="text" onChange={(_, files) => {
       const [event, file] = files[0];
       onSelect({
