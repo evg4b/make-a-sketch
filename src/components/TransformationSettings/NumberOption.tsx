@@ -11,17 +11,16 @@ interface TransformationSettingsProps {
 }
 
 const NumberOption: FC<TransformationSettingsProps> = ({ options, property, update, label, min, max }) => (
-  <div className="field is-horizontal ">
+  <div className="field">
     <label className="label">{label}</label>
     <div className="control">
-      <input type="number"
-        className="input"
-        value={options[property] as number || 0}
-        onChange={x => update(property, Number(x.target.value))}
+      <input type="range"
+        className="slider is-fullwidth"
         step={0.1}
         min={min}
+        onChange={x => update(property, Number(x.target.value))}
         max={max}
-      />
+        value={options[property] as number || 0} />
     </div>
   </div>
 );

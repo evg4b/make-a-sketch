@@ -1,7 +1,6 @@
 import rough from 'roughjs/bin/rough';
 import { RoughSVG } from 'roughjs/bin/svg';
 import { Options } from 'roughjs/bin/core';
-import Svgo from 'svgo';
 
 const getString = (element: SVGElement, attribute: string) : string | undefined => {
   return element.getAttribute(attribute) || undefined;
@@ -92,22 +91,11 @@ const serialize = (element: SVGElement): string => {
 export const processSvg = (content: string, customOptions: Partial<Options> = {}): Promise<string> =>
   new Promise(async(resolve, reject) => {
     try {
-      const processor = new Svgo({
-        plugins: [
-          { cleanupAttrs: true },
-          { removeComments: true },
-          { removeMetadata: true },
-          { removeXMLNS: true },
-          { convertShapeToPath: true },
-        ]
-      });
       if(!(window as any).data) {
         (window as any).data = document.createElement('div');
       }
       const div = (window as any).data as HTMLDivElement;
-      const data = await processor.optimize(content);
-      console.log(data);
-      div.innerHTML = data.data;
+      div.innerHTML = content;
       const svg = div.querySelector('svg');
       if (!svg) {
         throw new Error('Svg element not found')
@@ -119,10 +107,8 @@ export const processSvg = (content: string, customOptions: Partial<Options> = {}
       div.querySelectorAll("circle").forEach(x => processCircle(rc, x, customOptions));
       div.querySelectorAll("ellipse").forEach(x => processEllipse(rc, x, customOptions));
       div.querySelectorAll("line").forEach(x => processLine(rc, x, customOptions));
-
-      const res = await processor.optimize(serialize(svg));
-
-      resolve(res.data);
+      
+      resolve(serialize(svg));
     } catch (err) {
       reject(err)
     }

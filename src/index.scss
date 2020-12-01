@@ -27,6 +27,7 @@ $input-shadow: none;
 
 @import "~bulma/bulma.sass";
 @import "~bulma-switch/src/sass/index";
+@import '~bulma-slider';
 
 #root {
   overflow: hidden;
@@ -117,6 +118,6 @@ $input-shadow: none;
 }
 
 .options {
-  max-height: 40rem;
   overflow-y: scroll;
+  max-height: 60vh;
 }

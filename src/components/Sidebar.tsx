@@ -67,9 +67,11 @@ const Sidebar: FC<SidebarProps> = ({ onOriginalSelected, onProcessed }) => {
       </header>
       <div className="card-content">
         <div className="content">
-          <p className="no-selectable">
-            Service that lets you quickly draw your svg diagram from <a href="https://www.diagrams.net/">diagrams.net</a> in a sketchy, hand-drawn-like, style. This project based on <a href="https://roughjs.com/">rough.js</a> library.
-          </p>
+          {!file && (
+            <p className="no-selectable">
+              Service that lets you quickly draw your svg diagram from <a href="https://www.diagrams.net/">diagrams.net</a> in a sketchy, hand-drawn-like, style. This project based on <a href="https://roughjs.com/">rough.js</a> library.
+            </p>
+          )}
           <FileSelect onSelect={onSelectHandler} />
         </div>
       </div>

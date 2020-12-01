@@ -16,10 +16,10 @@ const TransformationSettings: FC<TransformationSettingsProps> = ({ onSettingsCha
 
   return (
     <>
-      <div className="field is-horizontal">
+      <div className="field">
         <label className="label">Fill style</label>
         <div className="control">
-          <div className="select">
+          <div className="select is-fullwidth">
             <select value={options.fillStyle} onChange={x => update('fillStyle', x.target.value)}>
               <option value="hachure" >hachure (default)</option>
               <option value="solid" >solid</option>
